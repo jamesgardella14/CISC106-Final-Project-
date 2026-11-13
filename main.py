@@ -376,7 +376,7 @@ def collection(state: State, favorites_only: bool = False) -> Page:
                 Button(
                     "View Card Details",
                     "card_details",
-                    [Argument("card_index", i)]
+                    [("card_index", i)]
                 )
             )
 
@@ -423,7 +423,7 @@ def build_card_details(state: State, card_index: int) -> Page:
                 Button(
                     "Remove from Favorites",
                     "toggle_favorite",
-                    [Argument("card_index", card_index)]
+                    [("card_index", card_index)]
                 )
             )
         else:
@@ -432,7 +432,7 @@ def build_card_details(state: State, card_index: int) -> Page:
                 Button(
                     "Add to Favorites",
                     "toggle_favorite",
-                    [Argument("card_index", card_index)]
+                    [("card_index", card_index)]
                 )
             )
 
@@ -505,7 +505,7 @@ def search_cards(
                 Button(
                     "View Card Details",
                     "card_details",
-                    [Argument("card_index", i)]
+                    [("card_index", i)]
                 )
             )
 
