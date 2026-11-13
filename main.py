@@ -10,7 +10,7 @@ set_site_information(
     author="James Gardella",
     description="Open virtual baseball card packs, collect players, and find rare cards.",
     sources="Classmates, LLM, Xavier Tan",
-    planning="Copy of CS1 Final Project 1_ Design (1).pdf",,
+    planning="Copy of CS1 Final Project 1_ Design (1).pdf",
     links=[
         "https://github.com/jamesgardella14/CISC106-Final-Project-"
     ]
