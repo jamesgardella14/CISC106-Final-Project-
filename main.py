@@ -1,27 +1,47 @@
 
 from drafter import *
 from dataclasses import dataclass
-from typing import Any
 import random
 
 
+# Makes the website look like a baseball card shop
 set_website_title("Baseball Card Collector")
 
-set_site_information(
-    author="James Gardella",
-    description="Open virtual baseball card packs, collect players, and find rare cards.",
-    sources="Classmates, LLM, Xavier Tan",
-    planning="Copy of CS1 Final Project 1_ Design (1).pdf",
-    links=[
-        "https://github.com/jamesgardella14/CISC106-Final-Project-"
-    ]
-)
+add_website_css("""
+body {
+    background-color: #eef2f7;
+    font-family: Arial, sans-serif;
+}
 
-set_website_style("default")
-set_website_framed(False)
-hide_debug_information()
+h1, h2, h3 {
+    color: #142d50;
+}
+
+button {
+    background-color: #142d50;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin: 5px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #315b89;
+}
+
+input, select {
+    padding: 8px;
+    border-radius: 5px;
+}
+
+hr {
+    border: 1px solid #cbd5e1;
+}
+""")
 
 
+# Stores information about each baseball card
 @dataclass
 class BaseballCard:
     player_name: str
@@ -32,6 +52,7 @@ class BaseballCard:
     favorite: bool = False
 
 
+# Stores information about the user and their game
 @dataclass
 class State:
     coins: int
@@ -41,94 +62,47 @@ class State:
     selected_pack: str
 
 
-players = [
-    ("Shohei Ohtani", "Dodgers", 2025, "DH"),
-    ("Aaron Judge", "Yankees", 2025, "OF"),
-    ("Mike Trout", "Angels", 2024, "OF"),
-    ("Mookie Betts", "Dodgers", 2025, "OF"),
-    ("Bryce Harper", "Phillies", 2025, "1B"),
-    ("Ronald Acuna Jr.", "Braves", 2024, "OF"),
-    ("Juan Soto", "Mets", 2025, "OF"),
-    ("Freddie Freeman", "Dodgers", 2025, "1B"),
-    ("Cal Raleigh", "Mariners", 2025, "C"),
-    ("Paul Skenes", "Pirates", 2025, "P"),
-    ("Bobby Witt Jr.", "Royals", 2025, "SS"),
-    ("Gunnar Henderson", "Orioles", 2025, "SS"),
-    ("Randy Johnson", "Diamondbacks", 2001, "P"),
-    ("Derek Jeter", "Yankees", 2000, "SS"),
-    ("Ken Griffey Jr.", "Mariners", 1997, "OF"),
-    ("David Ortiz", "Red Sox", 2007, "DH"),
-    ("Ichiro Suzuki", "Mariners", 2004, "OF"),
-    ("Albert Pujols", "Cardinals", 2009, "1B"),
-    ("Cal Ripken Jr.", "Orioles", 1995, "SS"),
-    ("Pedro Martinez", "Red Sox", 1999, "P"),
-    ("Nolan Ryan", "Rangers", 1991, "P"),
-    ("Tony Gwynn", "Padres", 1994, "OF"),
-    ("Barry Bonds", "Giants", 2002, "OF"),
-    ("Greg Maddux", "Braves", 1995, "P"),
-    ("Mariano Rivera", "Yankees", 2003, "P")
-]
-
-
-def get_pack_price(pack_name: str) -> int:
-    if pack_name == "Rookie Pack":
-        return 50
-    elif pack_name == "All-Star Pack":
-        return 100
-    elif pack_name == "Legends Pack":
-        return 150
-    else:
-        return 50
-
-
-def get_pack_size(pack_name: str) -> int:
-    return 5
-
-
-def get_pack_description(pack_name: str) -> str:
-    if pack_name == "Rookie Pack":
-        return "A basic pack with a chance to find rare players."
-    elif pack_name == "All-Star Pack":
-        return "A better pack with improved odds of rare cards."
-    elif pack_name == "Legends Pack":
-        return "The most expensive pack with the best rarity odds."
-    else:
-        return "Choose a pack to get started."
-
-
+# Creates a random baseball card
 def generate_card(pack_name: str) -> BaseballCard:
-    player = random.choice(players)
-    chance = random.randint(1, 100)
+
+    number = random.randint(1, 100)
 
     if pack_name == "Legends Pack":
-        if chance <= 10:
-            rarity = "Legendary"
-        elif chance <= 35:
-            rarity = "Rare"
-        elif chance <= 65:
-            rarity = "Uncommon"
-        else:
+        if number <= 35:
             rarity = "Common"
-
-    elif pack_name == "All-Star Pack":
-        if chance <= 4:
-            rarity = "Legendary"
-        elif chance <= 25:
-            rarity = "Rare"
-        elif chance <= 60:
+        elif number <= 65:
             rarity = "Uncommon"
+        elif number <= 90:
+            rarity = "Rare"
         else:
-            rarity = "Common"
+            rarity = "Legendary"
 
     else:
-        if chance <= 2:
-            rarity = "Legendary"
-        elif chance <= 15:
-            rarity = "Rare"
-        elif chance <= 45:
-            rarity = "Uncommon"
-        else:
+        if number <= 60:
             rarity = "Common"
+        elif number <= 85:
+            rarity = "Uncommon"
+        elif number <= 97:
+            rarity = "Rare"
+        else:
+            rarity = "Legendary"
+
+    players = [
+        ("Mike Trout", "Angels", 2024, "CF"),
+        ("Aaron Judge", "Yankees", 2024, "RF"),
+        ("Mookie Betts", "Dodgers", 2024, "RF"),
+        ("Shohei Ohtani", "Dodgers", 2024, "DH"),
+        ("Ronald Acuna Jr.", "Braves", 2024, "RF"),
+        ("Bryce Harper", "Phillies", 2024, "1B"),
+        ("Freddie Freeman", "Dodgers", 2024, "1B"),
+        ("Juan Soto", "Mets", 2025, "RF"),
+        ("Gunnar Henderson", "Orioles", 2024, "SS"),
+        ("Bobby Witt Jr.", "Royals", 2024, "SS"),
+        ("Cal Raleigh", "Mariners", 2025, "C"),
+        ("Paul Skenes", "Pirates", 2025, "P")
+    ]
+
+    player = random.choice(players)
 
     return BaseballCard(
         player[0],
@@ -139,428 +113,325 @@ def generate_card(pack_name: str) -> BaseballCard:
     )
 
 
-def card_description(card: BaseballCard) -> str:
-    return (
-        card.player_name
-        + " | "
-        + card.team
-        + " | "
-        + str(card.year)
-        + " | "
-        + card.position
-        + " | "
-        + card.rarity
-    )
+# Gets the price of each pack
+def get_pack_price(pack_name: str) -> int:
 
+    if pack_name == "Rookie Pack":
+        return 50
 
-def rarity_message(card: BaseballCard) -> str:
-    if card.rarity == "Legendary":
-        return "LEGENDARY PULL! An amazing card!"
-    elif card.rarity == "Rare":
-        return "RARE CARD! Great find!"
-    elif card.rarity == "Uncommon":
-        return "You found an uncommon card."
+    elif pack_name == "All-Star Pack":
+        return 100
+
     else:
-        return "You found a common card."
+        return 150
 
 
-def count_favorites(cards: list[BaseballCard]) -> int:
-    count = 0
-
-    for card in cards:
-        if card.favorite:
-            count += 1
-
-    return count
-
-
-def count_rare_cards(cards: list[BaseballCard]) -> int:
-    count = 0
-
-    for card in cards:
-        if card.rarity == "Rare" or card.rarity == "Legendary":
-            count += 1
-
-    return count
-
-
-def card_arguments(
-    card_index: int
-) -> dict[str, str | int | float | bool | list[Any] | dict[Any, Any] | None]:
-    return {"card_index": card_index}
-
-
+# Creates the navigation buttons used on the pages
 def navigation():
     return [
+        Button("HOME", "index"),
+        Button("PACK SHOP", "pack_shop"),
+        Button("MY COLLECTION", "collection"),
+        Button("SEARCH", "search_cards"),
         "\n",
-        HorizontalRule(),
-        Button("Home", "home"),
-        Button("Pack Shop", "pack_shop"),
-        Button("My Collection", "collection"),
-        Button("Search Cards", "search_cards"),
-        "\n"
+        HorizontalRule()
     ]
 
 
+# MAIN HOME PAGE
 @route
-def home(state: State) -> Page:
-    content = [
-        Header("BASEBALL CARD COLLECTOR"),
-        "Welcome to Baseball Card Collector!",
-        "\n",
-        "Open virtual packs and build your baseball card collection.",
-        "\n",
-        Header("YOUR ACCOUNT"),
+def index(state: State) -> Page:
+
+    return Page(state, [
+        Header("⚾ BASEBALL CARD COLLECTOR"),
+        "OPEN PACKS  |  COLLECT PLAYERS  |  FIND LEGENDS",
+        HorizontalRule(),
+
+        Header("Your Account"),
         "Coins: " + str(state.coins),
         "Packs Opened: " + str(state.packs_opened),
         "Cards Collected: " + str(len(state.collection)),
-        "Favorite Cards: " + str(count_favorites(state.collection)),
-        "Rare Cards: " + str(count_rare_cards(state.collection)),
-        "\n",
-        Header("GET STARTED"),
-        "Visit the pack shop to purchase your first pack.",
-        Button("Visit Pack Shop", "pack_shop"),
-        Button("View My Collection", "collection"),
-        "\n",
-        "Your starting balance is 500 coins."
-    ]
 
-    content += navigation()
+        HorizontalRule(),
 
-    return Page(state, content)
+        Header("Welcome, Collector!"),
+        "Build your collection by opening virtual baseball card packs.",
+        "Each pack contains five random players.",
+        "Try to find Common, Uncommon, Rare, and Legendary cards!",
+
+        Header("Explore the Website"),
+        Button("VISIT PACK SHOP", "pack_shop"),
+        Button("OPEN A PACK", "select_pack"),
+        Button("VIEW MY COLLECTION", "collection"),
+        Button("SEARCH PLAYERS", "search_cards"),
+
+        HorizontalRule(),
+        "Good luck finding your favorite players!"
+    ])
 
 
+# PACK SHOP PAGE
 @route
 def pack_shop(state: State) -> Page:
-    content = [
-        Header("PACK SHOP"),
-        "Choose a pack to open.",
-        "\n",
-        Header("ROOKIE PACK"),
-        "Price: 50 coins",
-        get_pack_description("Rookie Pack"),
-        "\n",
-        Header("ALL-STAR PACK"),
-        "Price: 100 coins",
-        get_pack_description("All-Star Pack"),
-        "\n",
-        Header("LEGENDS PACK"),
-        "Price: 150 coins",
-        get_pack_description("Legends Pack"),
-        "\n",
-        "Your current balance: " + str(state.coins),
-        "\n",
-        "Select your pack:",
+
+    return Page(state, navigation() + [
+        Header("THE PACK SHOP"),
+        "Choose a pack and see what players you can collect.",
+
+        HorizontalRule(),
+
+        Header("Rookie Pack"),
+        "Price: 50 Coins",
+        "A basic pack containing five random cards.",
+
+        Header("All-Star Pack"),
+        "Price: 100 Coins",
+        "A pack with five random cards and a chance at rare players.",
+
+        Header("Legends Pack"),
+        "Price: 150 Coins",
+        "A special pack with a better chance of finding rare cards.",
+
+        HorizontalRule(),
+
+        "Your Coins: " + str(state.coins),
+        Button("CHOOSE A PACK", "select_pack"),
+        Button("BACK HOME", "index")
+    ])
+
+
+# SELECT PACK PAGE
+@route
+def select_pack(state: State) -> Page:
+
+    return Page(state, navigation() + [
+        Header("SELECT YOUR PACK"),
+        "Choose which pack you want to open.",
+        "You currently have " + str(state.coins) + " coins.",
+
         SelectBox(
             "pack_choice",
             ["Rookie Pack", "All-Star Pack", "Legends Pack"],
             state.selected_pack
         ),
-        Button("Choose Pack", "select_pack")
-    ]
 
-    content += navigation()
-
-    return Page(state, content)
+        Button("OPEN SELECTED PACK", "open_pack"),
+        Button("BACK TO SHOP", "pack_shop")
+    ])
 
 
+# OPENS THE PACK AND GENERATES FIVE CARDS
 @route
-def select_pack(state: State, pack_choice: str = "Rookie Pack") -> Page:
-    valid_packs = [
-        "Rookie Pack",
-        "All-Star Pack",
-        "Legends Pack"
-    ]
+def open_pack(state: State, pack_choice: str) -> Page:
 
-    if pack_choice not in valid_packs:
-        pack_choice = "Rookie Pack"
-
-    state.selected_pack = pack_choice
     price = get_pack_price(pack_choice)
 
-    content = [
-        Header("PACK SELECTED"),
-        "You selected the " + pack_choice + ".",
-        "\n",
-        "Price: " + str(price) + " coins",
-        "Your balance: " + str(state.coins),
-        "\n",
-        get_pack_description(pack_choice),
-        "\n"
-    ]
+    state.selected_pack = pack_choice
 
-    if state.coins >= price:
-        content.append("You have enough coins to open this pack.")
-        content.append(Button("Open My Pack", "open_pack"))
-    else:
-        content.append("You do not have enough coins.")
-        content.append(Button("Return to Pack Shop", "pack_shop"))
-
-    content += navigation()
-
-    return Page(state, content)
-
-
-@route
-def open_pack(state: State) -> Page:
-    price = get_pack_price(state.selected_pack)
-
-    content = [
-        Header("OPENING YOUR PACK"),
-        "\n"
-    ]
-
+    # Checks if the user has enough coins
     if state.coins < price:
-        content.append("You do not have enough coins.")
-        content.append(Button("Return to Pack Shop", "pack_shop"))
+        return Page(state, navigation() + [
+            Header("NOT ENOUGH COINS"),
+            "You need " + str(price) + " coins to open this pack.",
+            "You currently have " + str(state.coins) + " coins.",
+            Button("BACK TO SHOP", "pack_shop")
+        ])
 
-    else:
-        state.coins -= price
-        state.packs_opened += 1
-        state.current_pack = []
+    # Takes coins and updates the pack count
+    state.coins = state.coins - price
+    state.packs_opened = state.packs_opened + 1
 
-        for i in range(get_pack_size(state.selected_pack)):
-            new_card = generate_card(state.selected_pack)
-            state.current_pack.append(new_card)
-            state.collection.append(new_card)
+    state.current_pack = []
 
-        content.append("You opened a " + state.selected_pack + "!")
-        content.append("\n")
-        content.append(Header("YOUR FIVE NEW CARDS"))
+    # Generates five random cards
+    for i in range(5):
+        card = generate_card(pack_choice)
 
-        for card in state.current_pack:
-            content.append(card_description(card))
-            content.append(rarity_message(card))
-            content.append("\n")
+        state.current_pack.append(card)
+        state.collection.append(card)
 
-        content.append("Coins remaining: " + str(state.coins))
-        content.append("Total cards collected: " + str(len(state.collection)))
-        content.append("\n")
-        content.append(Button("Open Another Pack", "pack_shop"))
-        content.append(Button("View My Collection", "collection"))
-
-    content += navigation()
-
-    return Page(state, content)
-
-
-@route
-def collection(state: State, favorites_only: bool = False) -> Page:
-    content = [
-        Header("MY COLLECTION"),
-        "Total cards: " + str(len(state.collection)),
-        "Favorite cards: " + str(count_favorites(state.collection)),
-        "Rare cards: " + str(count_rare_cards(state.collection)),
-        "\n",
-        "Check the box to show favorites only:",
-        CheckBox("favorites_only", favorites_only),
-        Button("Apply Filter", "collection"),
-        "\n"
+    # Displays the cards that were opened
+    content = navigation() + [
+        Header("YOU OPENED A " + pack_choice.upper() + "!"),
+        "Here are your five new cards:",
+        HorizontalRule()
     ]
 
-    found_card = False
-
-    for i in range(len(state.collection)):
-        card = state.collection[i]
-
-        if not favorites_only or card.favorite:
-            found_card = True
-
-            content.append(Header(card.player_name))
-            content.append(card.team + " | " + str(card.year))
-            content.append("Position: " + card.position)
-            content.append("Rarity: " + card.rarity)
-
-            if card.favorite:
-                content.append("Favorite card")
-
-            content.append(
-                Button(
-                    "View Card Details",
-                    "card_details",
-                    card_arguments(i)
-                )
-            )
-
-            content.append("\n")
-
-    if len(state.collection) == 0:
-        content.append(
-            "Your collection is empty. Open a pack to get started!"
-        )
-        content.append(Button("Visit Pack Shop", "pack_shop"))
-
-    elif not found_card:
-        content.append("No favorite cards found.")
-
-    content += navigation()
-
-    return Page(state, content)
-
-
-def build_card_details(state: State, card_index: int) -> Page:
-    content = [
-        Header("CARD DETAILS"),
-        "\n"
-    ]
-
-    if card_index < 0 or card_index >= len(state.collection):
-        content.append("Card not found.")
-        content.append(Button("Return to Collection", "collection"))
-
-    else:
-        card = state.collection[card_index]
+    for card in state.current_pack:
 
         content.append(Header(card.player_name))
         content.append("Team: " + card.team)
         content.append("Year: " + str(card.year))
         content.append("Position: " + card.position)
         content.append("Rarity: " + card.rarity)
-        content.append(rarity_message(card))
-        content.append("\n")
 
-        if card.favorite:
-            content.append("This card is in your favorites.")
-            content.append(
-                Button(
-                    "Remove from Favorites",
-                    "toggle_favorite",
-                    card_arguments(card_index)
-                )
-            )
-        else:
-            content.append("This card is not in your favorites.")
-            content.append(
-                Button(
-                    "Add to Favorites",
-                    "toggle_favorite",
-                    card_arguments(card_index)
-                )
-            )
+        if card.rarity == "Legendary":
+            content.append("⭐ LEGENDARY PULL!")
 
-        content.append("\n")
-        content.append(Button("Return to Collection", "collection"))
+        elif card.rarity == "Rare":
+            content.append("🔥 RARE CARD!")
 
-    content += navigation()
+        content.append(HorizontalRule())
+
+    content.append("Coins Remaining: " + str(state.coins))
+    content.append(Button("VIEW COLLECTION", "collection"))
+    content.append(Button("OPEN ANOTHER PACK", "select_pack"))
 
     return Page(state, content)
 
 
+# COLLECTION PAGE
 @route
-def card_details(state: State, card_index: int) -> Page:
-    return build_card_details(state, card_index)
+def collection(state: State, favorites_only: bool = False) -> Page:
 
+    content = navigation() + [
+        Header("MY BASEBALL CARD COLLECTION"),
+        "Total Cards: " + str(len(state.collection)),
+        "Check the box to show only your favorite cards.",
 
-@route
-def toggle_favorite(state: State, card_index: int) -> Page:
-    if 0 <= card_index < len(state.collection):
-        card = state.collection[card_index]
-        card.favorite = not card.favorite
-
-    return build_card_details(state, card_index)
-
-
-@route
-def search_cards(
-    state: State,
-    player_search: str = "",
-    favorites_only: bool = False
-) -> Page:
-
-    player_search = player_search.strip()
-
-    content = [
-        Header("SEARCH CARDS"),
-        "Search for a player by name.",
-        "\n",
-        TextBox("player_search", player_search),
-        "\n",
-        "Search favorites only:",
         CheckBox("favorites_only", favorites_only),
-        "\n",
-        Button("Search", "search_cards"),
-        "\n",
-        Header("SEARCH RESULTS")
+        Button("APPLY FILTER", "collection"),
+
+        HorizontalRule()
     ]
 
-    found_card = False
+    found = False
 
+    # Goes through every card in the collection
     for i in range(len(state.collection)):
+
         card = state.collection[i]
 
-        name_matches = (
-            player_search.lower() in card.player_name.lower()
-        )
+        if not favorites_only or card.favorite:
 
-        favorite_matches = (
-            not favorites_only or card.favorite
-        )
-
-        if name_matches and favorite_matches:
-            found_card = True
+            found = True
 
             content.append(Header(card.player_name))
             content.append(card.team + " | " + str(card.year))
             content.append("Rarity: " + card.rarity)
 
+            if card.favorite:
+                content.append("⭐ FAVORITE")
+
             content.append(
                 Button(
-                    "View Card Details",
+                    "VIEW CARD DETAILS",
                     "card_details",
-                    card_arguments(i)
+                    [Argument("card_index", i)]
                 )
             )
 
-            content.append("\n")
+            content.append(HorizontalRule())
 
-    if not found_card:
-        if len(state.collection) == 0:
-            content.append(
-                "You do not have any cards yet. Open a pack first!"
-            )
-        else:
-            content.append("No matching cards were found.")
+    if not found:
+        content.append("No cards found. Open a pack to get started!")
 
-    content += navigation()
+    content.append(Button("OPEN ANOTHER PACK", "select_pack"))
 
     return Page(state, content)
 
 
+# CARD DETAILS PAGE
 @route
-def collection_stats(state: State) -> Page:
-    common_count = 0
-    uncommon_count = 0
-    rare_count = 0
-    legendary_count = 0
+def card_details(state: State, card_index: int) -> Page:
 
-    for card in state.collection:
-        if card.rarity == "Common":
-            common_count += 1
-        elif card.rarity == "Uncommon":
-            uncommon_count += 1
-        elif card.rarity == "Rare":
-            rare_count += 1
-        elif card.rarity == "Legendary":
-            legendary_count += 1
+    if card_index < 0 or card_index >= len(state.collection):
+        return Page(state, [
+            Header("Card not found."),
+            Button("BACK TO COLLECTION", "collection")
+        ])
 
-    content = [
-        Header("COLLECTION STATISTICS"),
-        "Total cards: " + str(len(state.collection)),
-        "\n",
-        "Common cards: " + str(common_count),
-        "Uncommon cards: " + str(uncommon_count),
-        "Rare cards: " + str(rare_count),
-        "Legendary cards: " + str(legendary_count),
-        "\n",
-        "Favorite cards: " + str(count_favorites(state.collection)),
-        Button("Return to Collection", "collection")
+    card = state.collection[card_index]
+
+    return Page(state, navigation() + [
+        Header("BASEBALL CARD DETAILS"),
+
+        Header(card.player_name),
+        "Team: " + card.team,
+        "Year: " + str(card.year),
+        "Position: " + card.position,
+        "Rarity: " + card.rarity,
+
+        HorizontalRule(),
+
+        "Favorite Card:",
+        CheckBox("favorite_choice", card.favorite),
+
+        Button(
+            "SAVE FAVORITE SETTING",
+            "save_favorite",
+            [Argument("card_index", card_index)]
+        ),
+
+        Button("BACK TO COLLECTION", "collection")
+    ])
+
+
+# SAVES WHETHER A CARD IS A FAVORITE
+@route
+def save_favorite(
+    state: State,
+    card_index: int,
+    favorite_choice: bool
+) -> Page:
+
+    if 0 <= card_index < len(state.collection):
+        state.collection[card_index].favorite = favorite_choice
+
+    return card_details(state, card_index)
+
+
+# PLAYER SEARCH PAGE
+@route
+def search_cards(state: State, player_search: str = "") -> Page:
+
+    content = navigation() + [
+        Header("SEARCH PLAYERS"),
+        "Enter a player's name to search your collection.",
+
+        TextBox("player_search"),
+        Button("SEARCH", "search_cards"),
+
+        HorizontalRule()
     ]
 
-    content += navigation()
+    if player_search != "":
+
+        found = False
+
+        # Searches through every card in the collection
+        for i in range(len(state.collection)):
+
+            card = state.collection[i]
+
+            if player_search.lower() in card.player_name.lower():
+
+                found = True
+
+                content.append(Header(card.player_name))
+                content.append("Team: " + card.team)
+                content.append("Year: " + str(card.year))
+                content.append("Rarity: " + card.rarity)
+
+                content.append(
+                    Button(
+                        "VIEW CARD DETAILS",
+                        "card_details",
+                        [Argument("card_index", i)]
+                    )
+                )
+
+                content.append(HorizontalRule())
+
+        if not found:
+            content.append("No matching players were found in your collection.")
+
+    content.append(Button("BACK TO COLLECTION", "collection"))
 
     return Page(state, content)
 
 
+# STARTS THE WEBSITE
 start_server(
     State(
         coins=500,
