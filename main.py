@@ -1,6 +1,7 @@
 
 from drafter import *
 from dataclasses import dataclass
+from typing import Any
 import random
 
 
@@ -129,7 +130,7 @@ def generate_card(pack_name: str) -> BaseballCard:
         else:
             rarity = "Common"
 
-    new_card = BaseballCard(
+    return BaseballCard(
         player[0],
         player[1],
         player[2],
@@ -137,11 +138,9 @@ def generate_card(pack_name: str) -> BaseballCard:
         player[3]
     )
 
-    return new_card
-
 
 def card_description(card: BaseballCard) -> str:
-    description = (
+    return (
         card.player_name
         + " | "
         + card.team
@@ -152,8 +151,6 @@ def card_description(card: BaseballCard) -> str:
         + " | "
         + card.rarity
     )
-
-    return description
 
 
 def rarity_message(card: BaseballCard) -> str:
@@ -185,6 +182,12 @@ def count_rare_cards(cards: list[BaseballCard]) -> int:
             count += 1
 
     return count
+
+
+def card_arguments(
+    card_index: int
+) -> dict[str, str | int | float | bool | list[Any] | dict[Any, Any] | None]:
+    return {"card_index": card_index}
 
 
 def navigation():
@@ -273,7 +276,6 @@ def select_pack(state: State, pack_choice: str = "Rookie Pack") -> Page:
         pack_choice = "Rookie Pack"
 
     state.selected_pack = pack_choice
-
     price = get_pack_price(pack_choice)
 
     content = [
@@ -313,7 +315,7 @@ def open_pack(state: State) -> Page:
         content.append(Button("Return to Pack Shop", "pack_shop"))
 
     else:
-        state.coins = state.coins - price
+        state.coins -= price
         state.packs_opened += 1
         state.current_pack = []
 
@@ -376,7 +378,7 @@ def collection(state: State, favorites_only: bool = False) -> Page:
                 Button(
                     "View Card Details",
                     "card_details",
-                    [("card_index", i)]
+                    card_arguments(i)
                 )
             )
 
@@ -423,7 +425,7 @@ def build_card_details(state: State, card_index: int) -> Page:
                 Button(
                     "Remove from Favorites",
                     "toggle_favorite",
-                    [("card_index", card_index)]
+                    card_arguments(card_index)
                 )
             )
         else:
@@ -432,7 +434,7 @@ def build_card_details(state: State, card_index: int) -> Page:
                 Button(
                     "Add to Favorites",
                     "toggle_favorite",
-                    [("card_index", card_index)]
+                    card_arguments(card_index)
                 )
             )
 
@@ -505,7 +507,7 @@ def search_cards(
                 Button(
                     "View Card Details",
                     "card_details",
-                    [("card_index", i)]
+                    card_arguments(i)
                 )
             )
 
