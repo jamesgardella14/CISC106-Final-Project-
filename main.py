@@ -18,7 +18,7 @@ set_site_information(
     ]
 )
 
-set_website_style("dark")
+set_website_style("default")
 hide_debug_information()
 set_website_framed(False)
 
