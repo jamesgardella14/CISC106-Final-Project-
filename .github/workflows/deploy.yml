@@ -286,7 +286,12 @@ jobs:
             --no-stdout \
             2>&1 | tee _site/dashboard/analysis.log
 
-      - name: Record commit history
+      - - name: Record commit history
+  if: always()
+  shell: bash
+  run: |
+    mkdir -p _site/dashboard
+    git log --oneline --decorate --graph --all -n 50 > _site/dashboard/commits.txt
         if: ${{ !cancelled() }}
         shell: bash
         run: |
